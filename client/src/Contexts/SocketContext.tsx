@@ -1,11 +1,10 @@
 import {
   createContext,
   ReactNode,
-  useContext,
   useEffect,
   useState,
 } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import io from "socket.io-client";
@@ -14,9 +13,8 @@ import {
   setMetaData,
   removeComponent,
 } from "../Redux/BoardSlice";
-import { RootState } from "../Redux/Store";
-import { UserContext } from "./UserConfigContext";
-const socketUrl = process.env.SOCKET_URL || "http://localhost:5000";
+
+const socketUrl = process.env.SOCKET_URL || "http://localhost:4000";
 
 export type SocketType = {
   ws: Socket;
@@ -37,10 +35,9 @@ const ws = io(socketUrl);
 export const SocketProvider = ({ children }: SocketProviderProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const boardData = useSelector((state: RootState) => state.boardData);
-  const { username } = useContext(UserContext);
 
   const enterRoom = ({ roomId }: EnterRoomProps) => {
+    setRoomId(roomId);
     navigate(`/room/${roomId}`);
   };
 
@@ -81,13 +78,6 @@ export const SocketProvider = ({ children }: SocketProviderProps) => {
       },
     });
   };
-
-  interface RecieveMessageProps {
-    sender: string;
-    message: string;
-    time: Date;
-  }
-
 
   // States
   const [roomId, setRoomId] = useState<string>("");

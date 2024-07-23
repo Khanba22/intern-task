@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../Contexts/SocketContext";
 import { UserContext } from "../Contexts/UserConfigContext";
+import { send } from "../assets";
+import { useLocation } from "react-router-dom";
 
-interface Chat {
+interface ChatInterface {
   sender: string;
   time: string;
   message: string;
@@ -15,11 +17,12 @@ type handleRecieveMessageProps = {
 };
 
 const Chat = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(true);
   const { ws } = useContext(SocketContext);
   const [message, setMessage] = useState("");
   const { username } = useContext(UserContext);
-  const [chats, setChats] = useState<Chat[]>([]);
+  const [chats, setChats] = useState<ChatInterface[]>([]);
+  const [time,setTime] = useState(Date.now());
 
   const handleRecieveMessage = ({
     sender,
@@ -27,15 +30,19 @@ const Chat = () => {
     message,
   }: handleRecieveMessageProps) => {
     const chat = { sender, time, message }
-    var arr = chats
+    var arr = chats;
     arr.push(chat);
     setChats(arr);
+    setTime(Date.now())
   };
 
-  const sendMessage = () => {
-    ws?.emit("send-message", { sender: username, message: message });
-    setMessage("")
+  const location = useLocation()
 
+  const sendMessage = () => {
+    const roomId = location.pathname.split("/")[2];
+    console.log(roomId)
+    ws?.emit("send-message", { sender: username, message: message , roomId:roomId });
+    setMessage("")
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>)=>{
@@ -76,7 +83,7 @@ const Chat = () => {
         })}
         <div className="chatBox-inputbar">
           <textarea value={message} onChange={handleChange} placeholder="Type Something..." className="chatBox-input" />
-          <button onClick={sendMessage}>S</button>
+          <button onClick={sendMessage}><img src={send} alt="" /></button>
         </div>
       </div>
     </>

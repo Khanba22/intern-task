@@ -18,7 +18,7 @@ interface sendMessageProps {
 type RoomMap = Record<string, Room>;
 export const chatHandler = ({ socket, roomMap }: RoomHandlerProps) => {
   const sendMessage = ({ message, roomId, sender }: sendMessageProps) => {
-    console.log("Message Recieved");
+
     const date = new Date();
     const time = date.toLocaleTimeString();
     const messageData = {

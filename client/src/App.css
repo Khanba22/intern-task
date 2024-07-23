@@ -1,5 +1,3 @@
-
-
 .content-box {
   width: 100%;
   max-width: 50%;
@@ -43,15 +41,15 @@
 }
 
 
-.whiteboard-page{
+.whiteboard-page {
   height: 100vh;
   width: 100vw;
   position: relative;
 }
 
-.homePageContainer{
-  height: clamp(400px,30%,600px);
-  width: clamp(400px,50%,600px);
+.homePageContainer {
+  height: clamp(400px, 30%, 600px);
+  width: clamp(400px, 50%, 600px);
   padding: 0px 30px;
   position: absolute;
   left: 0;
@@ -65,39 +63,70 @@
   margin: auto;
 }
 
-.homePageContainer *{
+.homePageContainer * {
   width: 100%;
   margin-top: 30px;
   text-align: center;
 }
 
-.homePageContainer button{
+
+.homePageContainer button:disabled {
   background-color: #ccc;
-  border-radius:10px;
+}
+
+.homePageContainer button:nth-child(2) {
+  background: transparent;
+  transition: 0.3s;
+  border: 3px solid #f78fb3;
+  color: #ff4888;
+  font-weight: 800;
+  -webkit-transition: 0.3s;
+  -moz-transition: 0.3s;
+  -ms-transition: 0.3s;
+  -o-transition: 0.3s;
+}
+
+.homePageContainer button:nth-child(2):hover {
+  scale: 1.01;
+}
+
+.homePageContainer h4 {
+  color: #ff4888;
+  font-weight: 800;
+}
+
+
+.homePageContainer button {
+  color: white;
+  font-weight: 800;
+  background-color: #f78fb3;
+  border-radius: 10px;
   padding: 10px;
   outline: none;
   border: none;
   width: 20rem;
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  -ms-border-radius:10px;
-  -o-border-radius:10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
 }
 
-.homePageContainer input{
-  border-radius:10px;
+.homePageContainer input {
+  border-radius: 10px;
   padding: 10px;
   outline: none;
   border: none;
   width: 20rem;
-  border: 1px solid black;
-  -webkit-border-radius:10px;
-  -moz-border-radius:10px;
-  -ms-border-radius:10px;
-  -o-border-radius:10px;
+  border: 3px solid #f78fb3;
+  color: #ff4888;
+  font-weight: 600;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
 }
 
-.chat-toggle-button{
+.chat-toggle-button {
   position: fixed;
   height: 60px;
   width: 60px;
@@ -112,13 +141,13 @@
 }
 
 
-.chatBox{
-  box-shadow: 0px 0px 10px 1px #b4b7c0 ;
+.chatBox {
+  box-shadow: 0px 0px 10px 1px #b4b7c0;
   scroll-behavior: smooth;
   overflow-y: scroll;
   height: 80vh;
   transition: 0.5s;
-  width: clamp(300px,30%,350px);
+  width: clamp(300px, 30%, 350px);
   position: fixed;
   top: 70px;
   border-radius: 20px;
@@ -142,25 +171,34 @@
   -o-border-radius: 20px;
 }
 
-.chatBox span{
+.chatBox span {
   margin-right: 20px;
   font-size: 1rem;
 }
 
-.chatBox p{
+.chatBox p {
   font-size: 0.95rem;
 }
 
-.chat-container{
+.chat-container {
   width: 100%;
   padding: 0px 10px;
 }
 
-.chatBox::-webkit-scrollbar{
+.chat-container span {
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.chat-container p{
+  padding: 0px 5px;
+}
+
+.chatBox::-webkit-scrollbar {
   display: none;
 }
 
-.chatBox-inputbar{
+.chatBox-inputbar {
   width: 100%;
   border: none;
   padding: 0px 15px;
@@ -177,15 +215,19 @@
   display: flex;
 }
 
-.chatBox-inputbar textarea{
+.chatBox-inputbar textarea {
   width: calc(100% - 50px);
   border: none;
   outline: none;
   background: transparent;
   padding: 5px;
 }
-.chatBox-inputbar button{
+
+.chatBox-inputbar button {
   height: 40px;
+  border: 1px solid grey;
+  width: 40px;
+  padding: 5px 10px 10px 10px;
   border-radius: 50%;
   border: none;
   aspect-ratio: 1;
@@ -194,6 +236,13 @@
   -ms-border-radius: 50%;
   -o-border-radius: 50%;
 }
-.chatBox-inputbar textarea::-webkit-scrollbar{
+  
+
+.chatBox-inputbar button img{
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.chatBox-inputbar textarea::-webkit-scrollbar {
   display: none;
 }

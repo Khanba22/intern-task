@@ -6,5 +6,6 @@ import eclipse from "./ellipse-outline-shape-variant.png";
 import rectangle from "./rounded-rectangle.png";
 import pen from "./pen.png";
 import eraser from "./eraser.png"
+import send from "./send.png"
 
-export { arrow, download, cursor, eclipse, color, rectangle, pen , eraser };
+export { arrow, download, cursor, eclipse, color, rectangle, pen , eraser , send };

@@ -26,7 +26,6 @@ type AddComponentPayload = {
 
 export const RoomHandler = ({ socket, roomMap }: RoomHandlerProps) => {
   const addComponent = ({ username, data, roomId }: AddComponentPayload) => {
-    console.log("Component Added");
     const room = roomMap[roomId];
     if (!room) {
       socket.emit("error", { message: "Room not found" });
@@ -47,7 +46,7 @@ export const RoomHandler = ({ socket, roomMap }: RoomHandlerProps) => {
     username: string;
     roomId: string;
   }) => {
-    console.log("Component Removed");
+  
     const room = roomMap[roomId];
     if (!room) {
       socket.emit("error", { message: "Room not found" });

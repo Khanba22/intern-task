@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
         "Recieve"
-    ]
+    ],
+    "C_Cpp.errorSquiggles": "enabled",
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "vector": "cpp",
+        "xstring": "cpp"
+    }
 }

@@ -14,7 +14,7 @@ services:
     build:
       context: ./server
     ports:
-      - "5000:5000"
+      - "4000:4000"
     depends_on:
       - keycloak
 
@@ -25,7 +25,7 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev
     ports:
-      - "4000:4000"
+      - "5000:8080"
     volumes:
       - keycloak_data:/opt/keycloak/data
 
