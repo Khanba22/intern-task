@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                              /* Set the JavaScript language version for emitted JavaScript */
+    "module": "commonjs",                            /* Specify what module code is generated */
+    "jsx": "react-jsx",                             /* Specify the JSX code generation mode (react-jsx for React 17+) */
+    "strict": true,                                /* Enable all strict type-checking options */
+    "esModuleInterop": true,                        /* Emit additional JavaScript to ease support for importing CommonJS modules */
+    "forceConsistentCasingInFileNames": true,       /* Ensure that casing is correct in imports */
+    "skipLibCheck": true,                           /* Skip type checking of declaration files */
+    "baseUrl": "./",                                /* Base directory to resolve non-relative module names */
+    "paths": {
+      "*": ["node_modules/*"]
+    },
+    "outDir": "./build",                            /* Specify an output folder for all emitted files */
+    "sourceMap": true                               /* Create source map files for emitted JavaScript files */
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}
