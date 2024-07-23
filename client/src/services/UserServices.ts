@@ -1,9 +1,9 @@
 import Keycloak, { KeycloakInitOptions, KeycloakConfig } from "keycloak-js";
 
 const keycloakConfig: KeycloakConfig = {
-  url: "http://localhost:5000/",
-  realm: "myrealm",
-  clientId: "myclient",
+  url: process.env.REACT_APP_KEYCLOAK_URL,
+  realm: process.env.REACT_APP_KEYCLOAK_REALM || "",
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID || "",
 };
 
 const keycloak = new Keycloak(keycloakConfig);
