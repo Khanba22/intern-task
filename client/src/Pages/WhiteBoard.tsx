@@ -15,8 +15,7 @@ const WhiteBoard = () => {
   const { ws } = useContext(SocketContext);
   const [filled, setFilled] = useState(false);
   const { roomId } = useParams();
-
-  
+  const [size, setSize] = useState(1);
 
   const setName = async () => {
     const user = (await userServices.getUsername()) || "";
@@ -25,7 +24,7 @@ const WhiteBoard = () => {
 
   useEffect(() => {
     setName();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -37,6 +36,8 @@ const WhiteBoard = () => {
   return (
     <div className="whiteboard-page">
       <Toolbar
+        size={size}
+        setSize={setSize}
         filled={filled}
         setFilled={setFilled}
         tool={tool}
@@ -44,8 +45,15 @@ const WhiteBoard = () => {
         color={color}
         setColor={setColor}
       />
-      <DrawingBoard roomId={roomId} filled={filled} tool={tool} color={color} />
-      <Chat/>
+      <DrawingBoard
+        size={size}
+        setSize={setSize}
+        roomId={roomId}
+        filled={filled}
+        tool={tool}
+        color={color}
+      />
+      <Chat />
     </div>
   );
 };

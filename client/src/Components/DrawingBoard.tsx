@@ -12,23 +12,34 @@ interface LineInterface {
   points: Array<number>;
   color: string;
   tool: string;
+  size: number;
   filled: boolean;
 }
 
 interface DrawingBoardProps {
+  size: number;
+  setSize: React.Dispatch<React.SetStateAction<number>>;
   roomId: string | undefined;
   color: string;
   filled: boolean;
   tool: string;
 }
 
-const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
+const DrawingBoard = ({
+  color,
+  tool,
+  filled,
+  roomId,
+  size,
+  setSize,
+}: DrawingBoardProps) => {
   const userContext = useContext(UserContext);
   const { username } = userContext;
   const { ws, updater } = useContext(SocketContext);
   const dispatch = useDispatch();
   const [line, setLine] = useState<LineInterface>({
     color: color,
+    size: size,
     points: [],
     tool: tool,
     filled: filled,
@@ -39,6 +50,9 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
   const { metaData } = boardData;
   const shapeRef = useRef([]);
   const [updaterOn, setUpdateOn] = useState(false);
+  const [positions, setPositions] = useState<Record<string, any>>({
+    username: [0, 0, 0, 0],
+  });
 
   useEffect(() => {
     if (updaterOn) {
@@ -88,7 +102,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
     isDrawing.current = true;
     const pos = e.target.getStage()?.getPointerPosition();
     if (pos) {
-      setLine({ ...line, points: [pos.x, pos.y], filled });
+      setLine({ ...line, points: [pos.x, pos.y], filled, size: size });
     }
   };
 
@@ -129,6 +143,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
         roomId,
         username: username,
         data: {
+          size: size,
           type: "text",
           text: text,
           x: pos.x,
@@ -140,6 +155,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
         payload: {
           username: username,
           data: {
+            size: size,
             type: "text",
             text: text,
             x: pos.x,
@@ -167,6 +183,33 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
     });
   };
 
+  const handleMouseOver = (e: KonvaEventObject<MouseEvent>) => {
+    const stage = e.target.getStage();
+    const point = stage?.getPointerPosition();
+    setPositions({
+      ...positions,
+      [username || ""]: [point?.x, point?.y, size],
+    });
+    ws?.emit("update-position", {position:{[username || ""]: [point?.x, point?.y, size]},roomId})
+  };
+
+  const handlePositionUpdate = (update: Record<string, any>) => {
+    const positionUpdates = update.position || {}
+    const newData = {
+      ...positions,
+      ...positionUpdates
+    }
+    console.log(newData,"handleUpdates")
+    setPositions(newData);
+  };
+
+  useEffect(() => {
+    ws?.on("update-position", handlePositionUpdate);
+    return () => {
+      ws?.off("update-position", handlePositionUpdate);
+    }
+  }, []);
+
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -183,7 +226,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
             key={index}
             points={data.points}
             stroke={data.color}
-            strokeWidth={2}
+            strokeWidth={data.size}
             tension={0.5}
             lineCap="round"
             lineJoin="round"
@@ -195,7 +238,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
             key={index}
             points={data.points}
             stroke={"#ffffff"}
-            strokeWidth={30}
+            strokeWidth={data.size}
             tension={0.5}
             lineCap="round"
             lineJoin="round"
@@ -210,7 +253,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
             width={data.points[2] - data.points[0]}
             height={data.points[3] - data.points[1]}
             stroke={data.color}
-            strokeWidth={2}
+            strokeWidth={data.size}
           />
         ) : (
           <Rect
@@ -231,7 +274,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
             radiusX={Math.abs(data.points[2] - data.points[0]) / 2}
             radiusY={Math.abs(data.points[3] - data.points[1]) / 2}
             stroke={data.color}
-            strokeWidth={2}
+            strokeWidth={data.size}
           />
         ) : (
           <Ellipse
@@ -249,7 +292,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
             key={index}
             points={data.points}
             stroke={data.color}
-            strokeWidth={2}
+            strokeWidth={data.size}
             fill={data.color}
           />
         );
@@ -260,21 +303,21 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
 
   useEffect(() => {
     if (tool === "download") {
-      downloadImage()
+      downloadImage();
     }
-  },[tool])
+  }, [tool]);
 
   const downloadImage = () => {
     if (stageRef.current) {
       const stage = stageRef.current;
       const dataURL = stage.toDataURL({
-        mimeType: 'image/png',
+        mimeType: "image/png",
         quality: 1,
       });
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = dataURL;
-      link.download = 'konva-image.png';
+      link.download = "konva-image.png";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -283,6 +326,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
 
   return (
     <Stage
+      onPointerMove={handleMouseOver}
       width={document.body.clientWidth}
       height={document.body.clientHeight}
       onMouseDown={handleMouseDown}
@@ -301,7 +345,7 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
                 text={data.text}
                 x={data.x}
                 y={data.y}
-                fontSize={20}
+                fontSize={data.size}
                 draggable
               />
             );
@@ -310,6 +354,17 @@ const DrawingBoard = ({ color, tool, filled, roomId }: DrawingBoardProps) => {
           }
         })}
         {drawShape(line, 0)}
+        {Object.keys(positions).map((usernames: any) => {
+          return (
+            <Ellipse
+              radiusX={positions[usernames][2]}
+              radiusY={positions[usernames][2]}
+              x={positions[usernames][0]}
+              y={positions[usernames][1]}
+              fill={"#000000"}
+            />
+          );
+        })}
       </Layer>
     </Stage>
   );

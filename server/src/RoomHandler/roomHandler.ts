@@ -46,7 +46,6 @@ export const RoomHandler = ({ socket, roomMap }: RoomHandlerProps) => {
     username: string;
     roomId: string;
   }) => {
-  
     const room = roomMap[roomId];
     if (!room) {
       socket.emit("error", { message: "Room not found" });
@@ -87,8 +86,21 @@ export const RoomHandler = ({ socket, roomMap }: RoomHandlerProps) => {
     socket.to(roomId).emit("user-joined", { metaData: room.metaData });
   };
 
+  const updatePosition = ({
+    position,
+    roomId,
+  }: {
+    position: Record<string, any>;
+    roomId: string;
+  }) => {
+    console.log("", position);
+    socket.emit("update-position", { position });
+    socket.to(roomId).emit("update-position", { position });
+  };
+
   socket.on("join-room", joinRoom);
   socket.on("create-room", createRoom);
   socket.on("add-component", addComponent);
   socket.on("remove-last-element", removeLastComponent);
+  socket.on("update-position", updatePosition);
 };
