@@ -20,7 +20,7 @@ root.render(
           <App />
         </SocketProvider>
       </UserProvider>
-    </BrowserRouter>{" "}
+    </BrowserRouter>
   </Provider>
 
   // </React.StrictMode>s

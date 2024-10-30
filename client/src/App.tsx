@@ -17,11 +17,12 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const [isHome, setIsHome] = useState(false);
 
   if (!keycloakInitialized) {
     return <div>Loading...</div>;
   }
+
+  const [isHome, setIsHome] = useState(false);
 
   return (
     <>
